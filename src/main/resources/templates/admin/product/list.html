@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Product List</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Unit</th>
+            <th>Manufacturer</th>
+            <th>Status</th>
+            <th>Path</th>
+            <th>Alternative</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through the products -->
+        <tr th:each="product : ${product}">
+
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.description}"></td>
+            <td th:text="${product.unit}"></td>
+            <td th:text="${product.manufacturer}"></td>
+            <td th:text="${product.status}"></td>
+            <td th:each="image : ${product.productImageList}" th:text="${image.path}"></td>
+            <td th:each="image : ${product.productImageList}" th:text="${image.alternative}"></td>
+            <td>
+                <form th:action="@{/delete_product}" method="post">
+                    <input type="hidden" th:name="id" th:value="${product.product_id}" />
+                    <button type="submit">Xóa</button> <!-- Nút xóa -->
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button><a th:href="@{/add_product}">add Product</a> </button>
+</div>
+
+<!-- Include Bootstrap JavaScript and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
