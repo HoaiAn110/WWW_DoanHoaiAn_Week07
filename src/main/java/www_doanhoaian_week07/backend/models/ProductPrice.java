@@ -31,6 +31,8 @@ public class ProductPrice {
         this.note = note;
     }
 
+
+
     public Product getProduct() {
         return product;
     }

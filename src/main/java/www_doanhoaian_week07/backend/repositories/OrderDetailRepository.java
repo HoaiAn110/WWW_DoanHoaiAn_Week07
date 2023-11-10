@@ -5,5 +5,5 @@ import www_doanhoaian_week07.backend.ids.OrderDetailID;
 import www_doanhoaian_week07.backend.models.Order;
 import www_doanhoaian_week07.backend.models.OrderDetail;
 
-public interface OrderDetailRepository extends JpaRepository<OrderDetail, Order> {
+public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailID> {
 }

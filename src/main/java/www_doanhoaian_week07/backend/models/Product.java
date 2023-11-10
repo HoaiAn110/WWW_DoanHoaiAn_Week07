@@ -51,6 +51,15 @@ public class Product {
         this.status = status;
     }
 
+    public Product( String name, String description, String unit, String manufacturer, ProductStatus status, List<ProductImage> productImageList) {
+        this.name = name;
+        this.description = description;
+        this.unit = unit;
+        this.manufacturer = manufacturer;
+        this.status = status;
+        this.productImageList = productImageList;
+    }
+
     public long getProduct_id() {
         return product_id;
     }

@@ -1,4 +1,13 @@
-<!-- Trong file order.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!-- Trong file order.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -14,23 +23,23 @@
 <table class="table">
     <thead class="thead-dark">
     <tr>
-        <th>ID</th>
-        <th>Tên sản phẩm</th>
-        <th>Tên nhân viên</th>
-        <th>Tên khách hàng</th>
+        <th>Order Date</th>
+        <th>Quanlity</th>
+        <th>Price</th>
+        <th>Note</th>
     </tr>
     </thead>
     <tbody>
     <!-- Sử dụng Thymeleaf để lặp qua danh sách các đơn hàng -->
     <tr th:each="order : ${orders}">
-        <td th:text="${order.id}"></td>
-        <td th:text="${order.product.name}"></td>
-        <td th:text="${order.employee.name}"></td>
-        <td th:text="${order.customer.name}"></td>
+        <td th:text="${order.orderDate}"></td>
+        <td th:text="${order.orderDetails.quantity}"></td>
+        <td th:text="${order.orderDetails.price}"></td>
+        <td th:text="${order.orderDetails.note}"></td>
     </tr>
     </tbody>
 </table>
-
+<button><a th:href="@{/add_order}" >Add order</a></button>
 <!-- Nhúng Bootstrap JavaScript (nếu bạn cần) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>

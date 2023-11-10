@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;  // Change @RestController to @Controller
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import www_doanhoaian_week07.backend.Services.ProducServices;
+import www_doanhoaian_week07.backend.Services.ProductServices;
 import www_doanhoaian_week07.backend.Services.ProductImageServices;
 import www_doanhoaian_week07.backend.Services.ProductPriceServices;
 import www_doanhoaian_week07.backend.enums.ProductStatus;
 import www_doanhoaian_week07.backend.models.Product;
 import www_doanhoaian_week07.backend.models.ProductImage;
-import www_doanhoaian_week07.backend.models.ProductPrice;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 @Controller
 public class ProductController {
     @Autowired
-    private ProducServices producServices;
+    private ProductServices productServices;
 
     @Autowired
     private ProductImageServices productImageServices;
@@ -29,7 +28,7 @@ public class ProductController {
 
     @GetMapping("/product_list")
     public String showListProduct(Model model){
-        List<Product> activeProducts = producServices.findAllProduct().stream()
+        List<Product> activeProducts = productServices.findAllProduct().stream()
                 .filter(product -> product.getStatus() == ProductStatus.ACTIVE)
                 .collect(Collectors.toList());
 
@@ -45,29 +44,35 @@ public class ProductController {
 
     @PostMapping("/add_product")
     private String showSaveProduct(@ModelAttribute Product product, @RequestParam String status){
-//      List<ProductImage> productImage = product.getProductImageList();
-//        productImageServices.saveProductImg((ProductImage) productImage);
-//
-//        ProductPrice productPrice = (ProductPrice) product.getProductPrices();
-//        productPriceServices.saveProductPrice(productPrice);
+        List<ProductImage> productImageList = product.getProductImageList();
+
+        // Iterate through the list and save each ProductImage
+        for (ProductImage productImage : productImageList) {
+            productImageServices.saveProductImg(productImage);
+        }
 
         product.setStatus(ProductStatus.valueOf(status));
-        producServices.saveProduct(product);
+        productServices.saveProduct(product);  // Assuming productService is correct.
+
         return "redirect:/product_list";
     }
 
+
+
     @PostMapping("/delete_product")
     private String deleteProduct(@RequestParam long id){
-        Optional<Product> optionalProduct = producServices.findByID(id);
+        Optional<Product> optionalProduct = productServices.findByID(id);
 
         if(optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             product.setStatus(ProductStatus.IN_ACTIVE);
-            producServices.saveProduct(product);
+            productServices.saveProduct(product);
         }
 
         return "redirect:/product_list";
     }
+
+
 
 
 
