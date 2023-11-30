@@ -1,13 +1,31 @@
 package www_doanhoaian_week07.backend.models;
 
+
 import jakarta.persistence.*;
-import www_doanhoaian_week07.backend.ids.ProductPriceID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import www_doanhoaian_week07.backend.pks.ProductPricePK;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product_price")
-@IdClass(ProductPriceID.class)
+@IdClass(ProductPricePK.class)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@NamedQueries({
+        @NamedQuery(
+                name = "ProductPrice.getNearestPriceByProduct",query = "select p.price from ProductPrice p " +
+                "where p.product.id =: id order by p.priceDateTime limit 1"
+        ),
+        @NamedQuery(
+                name = "ProductPrice.getPriceFollowTime",
+                query = "select pr.priceDateTime,pr.price from ProductPrice pr where pr.product.id =: id"
+        )
+
+})
 public class ProductPrice {
     @Id
     @JoinColumn(name = "product_id")
@@ -15,63 +33,14 @@ public class ProductPrice {
     private Product product;
     @Id
     @Column(name = "price_date_time")
-    private LocalDateTime price_date_time;
+    private LocalDateTime priceDateTime;
     @Column(name = "price", nullable = false)
     private double price;
     @Column(name = "note")
     private String note;
 
-    public ProductPrice() {
-    }
-
-    public ProductPrice(Product product, LocalDateTime price_date_time, double price, String note) {
+    public ProductPrice(Product product, LocalDateTime priceDateTime) {
         this.product = product;
-        this.price_date_time = price_date_time;
-        this.price = price;
-        this.note = note;
-    }
-
-
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public LocalDateTime getPrice_date_time() {
-        return price_date_time;
-    }
-
-    public void setPrice_date_time(LocalDateTime price_date_time) {
-        this.price_date_time = price_date_time;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductPrice{" +
-                "product=" + product +
-                ", price_date_time=" + price_date_time +
-                ", price=" + price +
-                ", note='" + note + '\'' +
-                '}';
+        this.priceDateTime = priceDateTime;
     }
 }

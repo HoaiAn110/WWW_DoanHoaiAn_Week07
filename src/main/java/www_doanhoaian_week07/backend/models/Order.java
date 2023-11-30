@@ -1,17 +1,37 @@
 package www_doanhoaian_week07.backend.models;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+@NamedQueries({
+        @NamedQuery(
+                name = "Order.getOrderNewest",
+                query = "select o from Order o order by o.id desc limit 1"
+        ),
+        @NamedQuery(
+                name = "Order.getTotalPriceOrderByDate",
+                query = "select o.orderDate,SUM(od.price) from Order o inner join OrderDetail od on o.id = od.order.id where o.orderDate between :fromDate and :toDate group by o.orderDate"
+        ),
+        @NamedQuery(
+                name = "Order.getOrderByDate",
+                query = "select o from Order o where o.orderDate BETWEEN :fromDate AND :toDate"
+        )
+})
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private long order_id;
+    private long orderId;
 
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
@@ -24,67 +44,16 @@ public class Order {
     @JoinColumn(name = "cust_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
-
-    public Order() {
-    }
-
-    public Order(long order_id, LocalDateTime orderDate, Employee employee, Customer customer) {
-        this.order_id = order_id;
-        this.orderDate = orderDate;
-        this.employee = employee;
-        this.customer = customer;
-    }
-
-    public long getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(long order_id) {
-        this.order_id = order_id;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
 
     @Override
     public String toString() {
         return "Order{" +
-                "order_id=" + order_id +
+                "orderId=" + orderId +
                 ", orderDate=" + orderDate +
-                ", employee=" + employee +
-                ", customer=" + customer +
-                ", orderDetails=" + orderDetails +
+                ", employee=" + employee.getId() +
+                ", customer=" + customer.getId() +
                 '}';
     }
 }

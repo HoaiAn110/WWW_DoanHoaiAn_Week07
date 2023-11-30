@@ -1,11 +1,27 @@
 package www_doanhoaian_week07.backend.models;
 
+
 import jakarta.persistence.*;
-import www_doanhoaian_week07.backend.ids.OrderDetailID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import www_doanhoaian_week07.backend.pks.OrderDetailPK;
 
 @Entity
 @Table(name = "order_detail")
-@IdClass(OrderDetailID.class)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@IdClass(OrderDetailPK.class)
+@Builder
+
+@NamedQueries({
+        @NamedQuery(
+                name = "OrderDetail.getTotalPriceOfOrder",
+                query = "select SUM(od.price) from OrderDetail od where od.order.id =: id"
+        )
+})
 public class OrderDetail {
     @Column(name = "quantity", nullable = false)
     private double quantity;
@@ -13,7 +29,6 @@ public class OrderDetail {
     private double price;
     @Column(name = "note", length = 255, nullable = true)
     private String note;
-
     @Id
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -22,67 +37,4 @@ public class OrderDetail {
     @JoinColumn(name = "product_id")
     @ManyToOne
     private Product product;
-
-    public OrderDetail() {
-    }
-
-    public OrderDetail(double quantity, double price, String note, Order order, Product product) {
-        this.quantity = quantity;
-        this.price = price;
-        this.note = note;
-        this.order = order;
-        this.product = product;
-    }
-
-
-    public double getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderDetail{" +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                ", note='" + note + '\'' +
-                ", order=" + order +
-                ", product=" + product +
-                '}';
-    }
 }

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Navbar Example with Bootstrap</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{/admin}">Home <span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{/admin/products}">Product <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/employees}">Employee</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/admin/customers}">Customer</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<h1 class="text-center">List Customers</h1>
+<form th:action="@{/admin/customers}" class="d-flex col-6 my-3" role="search" method="get">
+    <input id="txtSearch" name="keyword"  class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+<th colspan="2">
+    <a class="btn btn-success" th:href="@{/admin/customers/insertForm}">
+       Insert Customer
+    </a>
+</th>
+
+
+<table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customer, iStat : ${customerPage.content}"
+        th:class="${iStat.odd}? 'odd-row' : 'even-row'">
+        <td th:text="${customer.id}"></td>
+        <td th:text="${customer.name}"></td>
+        <td th:text="${customer.email}"></td>
+        <td th:text="${customer.phone}"></td>
+        <td th:text="${customer.address}"></td>
+        <td>
+            <a class="btn btn-primary"
+               th:href="@{/admin/customers/showEdit/{id}(id=${customer.id})}">
+              Edit
+            </a>
+        </td>
+        <td>
+            <a class="btn btn-danger"
+               th:href="@{/admin/customers/delete/{id}(id=${customer.id})}">
+              Delete
+            </a>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

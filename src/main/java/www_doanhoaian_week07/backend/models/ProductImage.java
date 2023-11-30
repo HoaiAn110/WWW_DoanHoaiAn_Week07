@@ -1,14 +1,28 @@
 package www_doanhoaian_week07.backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "product_image")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@NamedQueries({
+        @NamedQuery(
+                name = "ProductImage.getImageByProduct",
+                query = "select pi.path from  ProductImage  pi where product.id =: id"
+        )
+})
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
-    private long image_id;
+    private long imageId;
     /*@Column(name = "product_id")
     private long product_id;*/
     @Column(name = "path", length = 250, nullable = false)
@@ -20,54 +34,9 @@ public class ProductImage {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductImage() {
-    }
-
-    public ProductImage(String path, String alternative) {
+    public ProductImage(String path, String alternative, Product product) {
         this.path = path;
         this.alternative = alternative;
-    }
-
-    public long getImage_id() {
-        return image_id;
-    }
-
-    public void setImage_id(long image_id) {
-        this.image_id = image_id;
-    }
-
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getAlternative() {
-        return alternative;
-    }
-
-    public void setAlternative(String alternative) {
-        this.alternative = alternative;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
         this.product = product;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductImage{" +
-                "image_id=" + image_id +
-                ", path='" + path + '\'' +
-                ", alternative='" + alternative + '\'' +
-                ", product=" + product +
-                '}';
     }
 }
